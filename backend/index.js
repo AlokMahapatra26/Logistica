@@ -7,7 +7,7 @@ const sendToken = require("./utils/jwtToken.js");
 const app = express();
 const cookieParser = require("cookie-parser");
 const { isAuthenticatedUser , authorizeRoles} = require("./middleware/auth.js");
-
+const cors = require("cors");
 
 
 //Database connection
@@ -16,6 +16,7 @@ dbConnect();
 //Global Middlewares
 app.use(express.json());
 app.use(cookieParser())
+app.use(cors());
 
 app.get("/" , (req ,res)=>{
     res.status(200).json({
@@ -82,13 +83,13 @@ app.post("/log-out" , (req,res)=>{
 
     try{
         res.cookie("token" , null , {
-            expires:new Date(Date.now()),
+            expires:new Date(Date.now()-1000),
             httpOnly:true
         })
     
         res.status(200).json({
             "success":true,
-            "message":"logged out successfullt"
+            "message":"logged out successfull"
         })
     }catch(error){
         res.status(500).json({
